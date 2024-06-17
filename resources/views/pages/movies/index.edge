@@ -1,0 +1,12 @@
+
+@layout.app({ title: "Movies" })
+
+  <main class=" grid place-items-center h-full">
+    <ul class="p-4 w-fit">
+      @each(movie in movies)
+      <li class="text-center"> <a href="{{route('movies.show', {slug: movie.slug})}}">{{ movie.title }}</a> </li>
+      @end
+    </ul>
+  </main>
+    
+@end

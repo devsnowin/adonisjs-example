@@ -1,0 +1,11 @@
+@layout.app({ title: "Dashboard" })
+
+  <main class="p-4">
+    <h1> Dashboard </h1>
+  </main>
+
+  @if(auth.isAuthenticated)
+    <p> Hello {{ auth.user.email }} </p>
+  @end
+
+@end

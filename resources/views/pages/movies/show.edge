@@ -1,0 +1,20 @@
+@layout.app({ title: movie.title })
+
+    <main class="p-4">
+        <div class="flex gap-2 flex-col">
+            <h1>{{{movie.title}}}</h1>
+            <div>
+                <label for="released date">Released: </label>
+                <time datetime="{{{movie.released}}}">{{{movie.released}}}</time>
+            </div>
+            <div>
+                <label for="director">Director: </label>
+                <span>{{{movie.director}}}</span>
+            </div>
+        </div>
+        <article class="my-4 space-y-2">
+            {{{movie.content}}}
+        </article>
+    </main>
+
+@end
