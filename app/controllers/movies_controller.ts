@@ -10,6 +10,8 @@ export default class MoviesController {
 
   async show({ params, view }: HttpContext) {
     const movie = await Movie.find(params.slug)
-    return view.render('pages/movies/show', { movie })
+    return view.render('pages/movies/show', {
+      movie: { ...movie, isFeatured: movie.slug === 'inception' ? true : false },
+    })
   }
 }

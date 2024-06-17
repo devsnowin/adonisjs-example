@@ -1,12 +1,25 @@
 
 @layout.app({ title: "Movies" })
 
-  <main class=" grid place-items-center h-full">
-    <ul class="p-4 w-fit">
-      @each(movie in movies)
-      <li class="text-center"> <a href="{{route('movies.show', {slug: movie.slug})}}">{{ movie.title }}</a> </li>
-      @end
-    </ul>
+  <main class="h-full">
+    <div class="space-y-6">
+      <header class="flex items-center justify-between">
+        <h1>List of Movies</h1>
+        <form action="{{route("redis.flush", {}, {qs: {_method: 'DELETE'}})}}" method="post">
+          {{ csrfField() }}
+          @button({variant: 'destructive', type: 'submit'}) 
+            @svg('ph:trash-bold', {class: 'mr-2'})
+            Flush Redis
+          @end
+        </form>
+      </header>
+      <div class="flex flex-wrap gap-3">
+        @each(movie in movies)
+          @!movie.card({movie, class: 'max-w-sm'})
+          {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
+        @end
+      </div>
+    </div>
   </main>
     
 @end

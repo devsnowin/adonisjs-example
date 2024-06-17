@@ -1,7 +1,24 @@
 @layout.app({ title: "Home" })
 
-  <main class="p-4">
-    <h1> Home </h1>
+  <main class="grid place-items-center h-full">
+    <div class="text-center max-w-xl space-y-2">
+      {{-- appName is coming from edge globals (ref: #start/globals.ts) --}}
+      <h2>Welcome to {{config.appName}}</h2>
+      <p>AdonisJS is a TypeScript-first web framework for Node.js. You can use it to create a full-stack web application or a JSON API server.
+      </p>
+      <div class="space-x-2">
+        @button({ href: "/movies"  }) 
+        Explore
+        @end
+        @button({
+          variant: 'outline',
+          href: "https://docs.adonisjs.com/guides/preface/introduction", 
+          target: "_blank"
+        }) 
+          Check Out Docs
+        @end
+      </div>
+    </div>
   </main>
 
 @end

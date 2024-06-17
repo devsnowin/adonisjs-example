@@ -81,3 +81,7 @@
 6/17/2024, 1:54:46 PM | ERROR | IoredisRedisConnectionStrategy | Failed connection to the redis database. | [object Object]
 6/17/2024, 1:54:47 PM | ERROR | IoredisRedisConnectionStrategy | Failed connection to the redis database. | [object Object]
 6/17/2024, 1:59:40 PM | ERROR | KeytarEncryptionStrategy | Failed to initialize keytar module | [object Object]
+6/17/2024, 5:36:38 PM | ERROR | KeytarEncryptionStrategy | Failed to initialize keytar module | [object Object]
+6/17/2024, 5:38:00 PM | ERROR | KeytarEncryptionStrategy | Failed to initialize keytar module | [object Object]
+6/17/2024, 5:40:09 PM | ERROR | KeytarEncryptionStrategy | Failed to initialize keytar module | [object Object]
+6/17/2024, 5:40:59 PM | ERROR | KeytarEncryptionStrategy | Failed to initialize keytar module | [object Object]

@@ -1,0 +1,15 @@
+@let(className = `inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide transition-colors rounded-md focus:ring-2 focus:ring-offset-2 focus:outline-none`)
+
+@let(variants = {
+        contained: "text-white duration-200 bg-primary hover:bg-primary/90 focus:ring-primary focus:shadow-outline",
+        secondary: "duration-100 text-secondary-foreground bg-secondary focus:ring-secondary hover:bg-secondary/90",
+        destructive: "duration-100 text-destructive-foreground bg-destructive focus:ring-destructive hover:bg-destructive/90",
+        outline: "duration-100 bg-transparent border-2 text-secondary-foreground focus:ring-secondary hover:text-white border-secondary hover:bg-secondary"
+})
+
+@let(nodeName = $props.has('href') ? "a" : "button")
+@let(variant = variants[$props.variant] || variants['contained'])
+
+<{{ nodeName }} {{$props.merge({class: [className, variant]}).toAttrs()}}>
+        {{{await $slots.main()}}}
+</{{ nodeName }}>
