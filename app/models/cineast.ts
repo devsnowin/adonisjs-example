@@ -6,7 +6,7 @@ export default class Cineast extends BaseModel {
   declare id: number
 
   @column()
-  declare fisrtName: string
+  declare firstName: string
 
   @column()
   declare lastName: string

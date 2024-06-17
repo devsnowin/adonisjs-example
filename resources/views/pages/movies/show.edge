@@ -7,10 +7,14 @@
 
     <main>
         <div class="flex gap-2 flex-col">
-            <h1 class="{{html.classNames([{'text-rose-500': movie.isFeatured}])}}">{{{movie.title}}}</h1>
+            <h1 class="{{html.classNames([{'text-rose-500': movie.slug === 'inception'}])}}">{{{movie.title}}}</h1>
+            <div class="text-gray-500">
+                <label for="released date">Status: </label>
+                <p>{{{movie.status}}}</p>
+            </div>
             <div class="text-gray-500">
                 <label for="released date">Released: </label>
-                <time datetime="{{{movie.released}}}">{{{movie.released}}}</time>
+                <time datetime="{{{movie.releasedAt}}}">{{{movie.releasedAt}}}</time>
             </div>
             <div class="text-gray-500">
                 <label for="director">Director: </label>
@@ -19,8 +23,8 @@
         </div>
         
         <article class="my-4 space-y-2 [&>h2]:text-primary">
-            @if(movie.content) 
-                {{{movie.content}}}
+            @if(movie.abstract) 
+                {{{movie.abstract}}}
             @else
                 <p>No more details available!</p>
             @end

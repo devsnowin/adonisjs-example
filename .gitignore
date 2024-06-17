@@ -3,6 +3,9 @@ node_modules
 build
 tmp
 
+# docker
+docker-data
+
 # Secrets
 .env
 .env.local

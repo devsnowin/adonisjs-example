@@ -4,14 +4,14 @@ import Movie from '#models/movie'
 
 export default class MoviesController {
   async index({ view }: HttpContext) {
-    const movies = await Movie.findAll()
+    const movies = await Movie.all()
     return view.render('pages/movies/index', { movies })
   }
 
   async show({ params, view }: HttpContext) {
-    const movie = await Movie.find(params.slug)
+    const movie = await Movie.findByOrFail('slug', params.slug)
     return view.render('pages/movies/show', {
-      movie: { ...movie, isFeatured: movie.slug === 'inception' ? true : false },
+      movie,
     })
   }
 }
