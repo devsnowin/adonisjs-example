@@ -1,0 +1,41 @@
+
+<li class="relative max-w-sm overflow-hidden rounded-xl bg-card text-card-foreground shadow">
+    <img src="https://cdn.devdojo.com/images/august2023/wallpaper.jpeg" class="relative z-20 object-cover w-full h-32" />
+    <div class="absolute top-0 z-50 flex items-center w-full mt-2 translate-y-24 px-7 -translate-x-0">
+        <div class="w-20 h-20 p-1 bg-white rounded-full">
+            <img src="{{$props.cineast.headshotUrl}}" class="w-full h-full rounded-full" />
+        </div>
+        <span class="w-full max-w-40 mt-6 ml-2">
+            <h5 class="text-base font-bold leading-6 tracking-tight">{{$props.cineast.fullName}}</h5>
+            <small class="block mt-1 text-sm font-medium leading-none text-neutral-500">
+                {{
+                    ($props.cineast.firstName)
+                        .toLowerCase()
+                        .padStart($props.cineast.firstName.length+1, "@")
+                }}
+            </small>
+        </span>
+        @button({ href: $props.href, class: 'absolute right-0 mr-7 mt-6' }) 
+        <span>View</span>
+        @end
+    </div>
+    <div class="relative pb-6 p-7">
+        <p class="mt-12 mb-6 text-neutral-500 text-">
+            Worked with {{Number($props.cineast.$extras.notReleasedCount)+Number($props.cineast.$extras.releasedCount)}} movies
+        </p>
+        <div class="flex items-center justify-between pr-2 text-neutral-500">
+            <span class="text-sm hover:underline">
+                <strong class="text-white">
+                    {{$props.cineast.$extras.releasedCount}}
+                </strong> 
+                Released
+            </span>
+            <span class="text-sm hover:underline">
+                <strong class="text-white">
+                    {{$props.cineast.$extras.notReleasedCount}}
+                </strong> 
+                Not Released
+            </span>
+        </div>
+    </div>
+</li>

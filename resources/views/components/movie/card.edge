@@ -1,29 +1,43 @@
 <div 
     class="{{
         html.classNames([
-            "rounded-xl bg-card text-card-foreground shadow p-7", 
+            "rounded-xl bg-card text-card-foreground shadow p-7 space-y-2", 
             ($props.class || "" )
             ])
         }}"
     {{ $props.except(['movie', 'class' ]).toAttrs() }}
 >
-    <a 
-        href="{{ route('movies.show', {slug: movie.slug}) }}"
-        class="mb-3 flex justify-between items-center"
-    >
-        <h5 
-            class="text-xl font-bold leading-none tracking-tight"
-        >
-            {{ movie.title }}</h5>
-            @if(movie.slug === "inception")
-                <i class="text-2xl ml-2">✨</i>
-            @end
-    </a>
+    <div class="flex justify-between items-center">
+        <h5 class="text-xl font-bold tracking-tight">
+            {{ movie.title }}
+        </h5>
+        @if(movie.slug === "inception")
+            <i class="text-2xl ml-2">✨</i>
+        @end
+    </div>
 
-    <p class="mb-4">{{ truncate(movie.summary, 150) }}</p>
-    
+    @if(showCineasts) 
+        <div>
+            <div class="flex items-center gap-3">
+                <strong class="text-zinc-500">Director: </strong>
+                <a href="{{ route('directors.show', { id: movie.director.id }) }}">
+                    {{ movie.director.fullName }}
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <strong class="text-zinc-500">Writer: </strong>
+                <a href="{{ route('writers.show', { id: movie.writer.id }) }}">
+                    {{ movie.writer.fullName }}
+                </a>
+            </div>
+        </div>
+    @else
+        <p>
+            {{truncate(movie.summary, 100)}}
+        </p>
+    @end
 
-    @button({ href: route('movies.show', {slug: movie.slug}) })
+    @button({ href: route('movies.show', { slug: movie.slug }), class: '!mt-4' })
         <span>View Details</span>
     @end
 </div>

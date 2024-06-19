@@ -1,0 +1,12 @@
+@layout.app({title: writer.fullName}) 
+    
+    <main class="space-y-6">
+        <h1>{{writer.fullName}}'s Writings</h1>
+        <ul class="flex flex-wrap gap-3">
+            @each(movie in movies)
+                @!movie.card({ movie, class: 'w-full max-w-sm' })
+            @end
+        </ul>
+    </main>
+
+@end

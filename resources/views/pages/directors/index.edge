@@ -1,0 +1,14 @@
+@layout.app({ title: "Directors" })
+
+    {{-- {{inspect(directors[0])}} --}}
+
+    <div class="space-y-6">
+        <h1>Movie Directors</h1>
+        <ul class="grid grid-cols-3 gap-4">
+            @each(director in directors)
+                @!cineast.card({href: route('directors.show', { id: director.id }), cineast: director})
+            @end
+        </ul>
+    </div>
+
+@end

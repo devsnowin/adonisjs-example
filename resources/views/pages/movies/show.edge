@@ -5,12 +5,16 @@
         <meta name="description" content="{{movie.summary}}">
     @end
 
+    {{inspect(movie)}}
+    
     <main>
         <div class="flex gap-2 flex-col">
             <h1 class="{{html.classNames([{'text-rose-500': movie.slug === 'inception'}])}}">{{{movie.title}}}</h1>
-            <div class="text-gray-500">
+            <div class="text-gray-500 flex items-center gap-3">
                 <label for="released date">Status: </label>
-                <p>{{{movie.status}}}</p>
+                <span class="rounded-full px-2.5 py-0.5 text-white text-xs font-semibold bg-primary">
+                    {{{movie.status.name}}}
+                </span>
             </div>
             <div class="text-gray-500">
                 <label for="released date">Released: </label>
@@ -18,7 +22,11 @@
             </div>
             <div class="text-gray-500">
                 <label for="director">Director: </label>
-                <span>{{{movie.director}}}</span>
+                <span>{{{movie.director.fullName}}}</span>
+            </div>
+            <div class="text-gray-500">
+                <label for="director">Writer: </label>
+                <span>{{{movie.writer.fullName}}}</span>
             </div>
         </div>
         

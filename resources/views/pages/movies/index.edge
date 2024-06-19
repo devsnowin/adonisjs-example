@@ -4,8 +4,8 @@
   <main class="h-full">
     <div class="space-y-6">
       <header class="flex items-center justify-between">
-        <h1>List of Movies</h1>
-        <form action="{{route("redis.flush", {}, {qs: {_method: 'DELETE'}})}}" method="post">
+        <h1>Recently Released Movies</h1>
+        <form action="{{ route("redis.flush", {}, { qs: { _method: 'DELETE' } }) }}" method="post">
           {{ csrfField() }}
           @button({variant: 'destructive', type: 'submit'}) 
             @svg('ph:trash-bold', {class: 'mr-2'})
@@ -13,11 +13,23 @@
           @end
         </form>
       </header>
-      <div class="flex flex-wrap gap-3">
-        @each(movie in movies)
-          @!movie.card({movie, class: 'max-w-sm'})
-          {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
-        @end
+      <div class="space-y-4">
+        <h2>Coming Soon</h2>
+        <div class="flex flex-wrap gap-3">
+          @each(movie in comingSoonMovies)
+            @!movie.card({ movie, class: 'w-full max-w-sm', showCineasts: true })
+            {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
+          @end
+        </div>
+      </div>
+      <div class="space-y-4">
+        <h2>Recently Released</h2>
+        <div class="flex flex-wrap gap-3">
+          @each(movie in recentlyReleasedMovies)
+            @!movie.card({ movie, class: 'w-full max-w-sm', showCineasts: true })
+            {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
+          @end
+        </div>
       </div>
     </div>
   </main>
