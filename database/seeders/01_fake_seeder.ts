@@ -36,7 +36,21 @@ export default class extends BaseSeeder {
       index++
     }).createMany(movies.length)
 
-    await MovieFactory.with('director').with('writer').createMany(3)
+    await MovieFactory.with('director')
+      .with('writer')
+      .with('castMembers', 3, (builder) =>
+        builder.pivotAttributes([
+          { character_name: 'Robert', sort_order: 0 },
+          { character_name: 'Jane', sort_order: 1 },
+          { character_name: 'Joseph', sort_order: 2 },
+        ])
+      )
+      .with('crewMembers', 5, (builder) =>
+        builder.pivotAttributes({
+          title: 'Camera Operator',
+        })
+      )
+      .createMany(3)
     await MovieFactory.with('director').with('writer').apply('released').createMany(2)
     await MovieFactory.with('director').with('writer').apply('releasingSoon').createMany(2)
     await MovieFactory.with('director').with('writer').apply('postProduction').createMany(2)

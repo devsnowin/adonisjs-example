@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column, scope } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, manyToMany, scope } from '@adonisjs/lucid/orm'
 import string from '@adonisjs/core/helpers/string'
 
 import MovieStatuses from '#enums/movie_statuses'
 import MovieStatus from './movie_status.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Cineast from './cineast.js'
 
 export default class Movie extends BaseModel {
@@ -58,6 +58,28 @@ export default class Movie extends BaseModel {
     foreignKey: 'directorId',
   })
   declare director: BelongsTo<typeof Cineast>
+
+  @manyToMany(() => Cineast, {
+    localKey: 'id',
+    relatedKey: 'id',
+    pivotForeignKey: 'movie_id',
+    pivotRelatedForeignKey: 'cineast_id',
+    pivotTable: 'crew_movies',
+    // pivotColumns: ['title', 'sort_order'],
+    pivotTimestamps: true,
+  })
+  declare crewMembers: ManyToMany<typeof Cineast>
+
+  @manyToMany(() => Cineast, {
+    localKey: 'id',
+    relatedKey: 'id',
+    pivotForeignKey: 'movie_id',
+    pivotRelatedForeignKey: 'cineast_id',
+    pivotTable: 'cast_movies',
+    pivotColumns: ['character_name', 'sort_order'],
+    pivotTimestamps: true,
+  })
+  declare castMembers: ManyToMany<typeof Cineast>
 
   static released = scope((query) => {
     query.where((group) =>
