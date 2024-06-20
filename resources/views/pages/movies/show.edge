@@ -4,37 +4,97 @@
         <meta name="keywords" content="{{movie.title}}">
         <meta name="description" content="{{movie.summary}}">
     @end
-    
+
     <main>
-        <div class="flex gap-2 flex-col">
-            <h1 class="{{html.classNames([{'text-rose-500': movie.slug === 'inception'}])}}">{{{movie.title}}}</h1>
-            <div class="text-gray-500 flex items-center gap-3">
-                <label for="released date">Status: </label>
-                <span class="rounded-full px-2.5 py-0.5 text-white text-xs font-semibold bg-primary">
-                    {{{movie.status.name}}}
-                </span>
+
+        <header class="flex items-end gap-8">
+            <div class="w-80 h-auto rounded-sm overflow-hidden">
+                <img src="{{movie.posterUrl}}" alt="{{movie.title}}">
             </div>
-            <div class="text-gray-500">
-                <label for="released date">Released: </label>
-                <time datetime="{{{movie.releasedAt}}}">{{{movie.releasedAt}}}</time>
+            <div class="flex gap-2 flex-col">
+                <h1 class="{{
+                    html.classNames([
+                        'max-w-xl box-decoration-slice bg-gradient-to-r from-[#f300e1] via-[#008cf1] to-[#ffc535] bg-clip-text text-transparent p-2'
+                        ])
+                    }}"
+                >
+                    {{ movie.title }}
+                </h1>
+                <div class="flex gap-8 mb-4">
+                    <div class="space-y-2">
+                        <div class="text-gray-500 flex items-center gap-3">
+                            <label for="released date">Status: </label>
+                            <span class="rounded-full px-2.5 py-0.5 text-primary-foreground text-xs font-semibold bg-primary">
+                                {{{movie.status.name}}}
+                            </span>
+                        </div>
+                        <div class="text-gray-500">
+                            <label for="released date">Released: </label>
+                            <time datetime="{{{movie.releasedAt}}}" class="text-white">{{{new Date(movie.releasedAt).toDateString()}}}</time>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-gray-500">
+                            <label for="director">Director: </label>
+                            <a
+                                href="{{route('directors.show', {id: movie.director.id})}}"
+                                class="text-white"
+                            >
+                                {{{movie.director.fullName}}}
+                            </a>
+                        </div>
+                        <div class="text-gray-500">
+                            <label for="director">Writer: </label>
+                            <a
+                                href="{{route('writers.show', {id: movie.writer.id})}}"
+                                class="text-white"
+                            >
+                                {{{movie.writer.fullName}}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="text-gray-500">
-                <label for="director">Director: </label>
-                <span>{{{movie.director.fullName}}}</span>
-            </div>
-            <div class="text-gray-500">
-                <label for="director">Writer: </label>
-                <span>{{{movie.writer.fullName}}}</span>
-            </div>
-        </div>
-        
+        </header>
+
         <article class="my-4 space-y-2 [&>h2]:text-primary">
-            @if(movie.abstract) 
+            @if(movie.abstract)
                 {{{movie.abstract}}}
             @else
                 <p>No more details available!</p>
             @end
         </article>
+
+        <div class="my-8 space-y-12">
+            <div class="space-y-4">
+                <h3 class="text-2xl before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-rose-600 relative inline-block">
+                    <span class="relative text-white">Cast</span>
+                </h3>
+                <dl class="flex flex-wrap gap-8">
+                    @if(cast.length <= 0)
+                    <p>No Casts</p>
+                    @else
+                        @each(cineast in cast)
+                            @!cineast.nameCard({ cineast, name: cineast.$extras.pivot_character_name })
+                        @end
+                    @end
+                </dl>
+            </div>
+            <div class="space-y-4">
+                <h3 class="text-2xl before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-primary relative inline-block">
+                    <span class="relative text-white">Crew:</span>
+                </h3>
+                <dl class="flex flex-wrap gap-10 w-full">
+                    @if(crew.length <= 0)
+                        <p class='text-gray-500'>No Crews</p>
+                    @else
+                        @each(cineast in crew)
+                            @!cineast.nameCard({ cineast, name: cineast.$extras.pivot_title })
+                        @end
+                    @end
+                </dl>
+            </div>
+        </div>
     </main>
 
 @end

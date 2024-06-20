@@ -1,6 +1,30 @@
+@let({releasedCount, notReleasedCount} = $props.cineast.$extras)
+@let(totalMovies = $props.totalMovies ?? Number(notReleasedCount) + Number(releasedCount))
+@let(colors = [
+        'bg-gradient-to-r from-yellow-300 via-purple-300 to-green-300',
+        'bg-gradient-to-r from-red-300 via-blue-300 to-yellow-300',
+        'bg-gradient-to-r from-green-300 via-pink-300 to-teal-300',
+        'bg-gradient-to-r from-purple-300 via-orange-300 to-indigo-300',
+        'bg-gradient-to-r from-pink-300 via-yellow-300 to-red-300',
+        'bg-gradient-to-r from-orange-300 via-blue-300 to-green-300',
+        'bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300',
+        'bg-gradient-to-r from-indigo-300 via-cyan-300 to-yellow-300',
+        'bg-gradient-to-r from-teal-300 via-amber-200 to-pink-300',
+        'bg-gradient-to-r from-cyan-300 via-red-300 to-orange-300',
+    ]
+)
 
-<li class="relative max-w-sm overflow-hidden rounded-xl bg-card text-card-foreground shadow">
-    <img src="https://cdn.devdojo.com/images/august2023/wallpaper.jpeg" class="relative z-20 object-cover w-full h-32" />
+@let(cardColor = colors.at(Math.floor(Math.random() * colors.length)))
+
+<div class="{{
+        html.classNames([
+            "relative max-w-sm overflow-hidden rounded-xl bg-card text-card-foreground shadow",
+            ($props.class || "")
+        ])
+    }}"
+    {{ $props.except(['cineast', 'class', 'href', 'totalMovies' ]).toAttrs() }}
+>
+    <div class="relative z-20 object-cover {{cardColor}} w-full h-32"></div>
     <div class="absolute top-0 z-50 flex items-center w-full mt-2 translate-y-24 px-7 -translate-x-0">
         <div class="w-20 h-20 p-1 bg-white rounded-full">
             <img src="{{$props.cineast.headshotUrl}}" class="w-full h-full rounded-full" />
@@ -15,27 +39,31 @@
                 }}
             </small>
         </span>
-        @button({ href: $props.href, class: 'absolute right-0 mr-7 mt-6' }) 
-        <span>View</span>
+        @if(Object.keys($props.cineast.$extras).length > 0)
+            @button({ href: $props.href, class: 'absolute right-0 mr-7 mt-6' })
+            <span>View</span>
+            @end
         @end
     </div>
     <div class="relative pb-6 p-7">
         <p class="mt-12 mb-6 text-neutral-500 text-">
-            Worked with {{Number($props.cineast.$extras.notReleasedCount)+Number($props.cineast.$extras.releasedCount)}} movies
+            Worked with {{totalMovies}} movies
         </p>
-        <div class="flex items-center justify-between pr-2 text-neutral-500">
-            <span class="text-sm hover:underline">
-                <strong class="text-white">
-                    {{$props.cineast.$extras.releasedCount}}
-                </strong> 
-                Released
-            </span>
-            <span class="text-sm hover:underline">
-                <strong class="text-white">
-                    {{$props.cineast.$extras.notReleasedCount}}
-                </strong> 
-                Not Released
-            </span>
-        </div>
+        @if(Object.keys($props.cineast.$extras).length > 0)
+            <div class="flex items-center justify-between pr-2 text-neutral-500">
+                <span class="text-sm hover:underline">
+                    <strong class="text-white">
+                        {{releasedCount}}
+                    </strong>
+                    Released
+                </span>
+                <span class="text-sm hover:underline">
+                    <strong class="text-white">
+                        {{notReleasedCount}}
+                    </strong>
+                    Not Released
+                </span>
+            </div>
+        @end
     </div>
-</li>
+</div>

@@ -65,7 +65,7 @@ export default class Movie extends BaseModel {
     pivotForeignKey: 'movie_id',
     pivotRelatedForeignKey: 'cineast_id',
     pivotTable: 'crew_movies',
-    // pivotColumns: ['title', 'sort_order'],
+    pivotColumns: ['title', 'sort_order'],
     pivotTimestamps: true,
   })
   declare crewMembers: ManyToMany<typeof Cineast>

@@ -1,7 +1,13 @@
-@layout.app({title: writer.fullName}) 
-    
+@layout.app({title: writer.fullName})
+
     <main class="space-y-6">
         <h1>{{writer.fullName}}'s Writings</h1>
+        @!cineast.card({
+            href: route('writers.show', { id: writer.id }),
+            class: '!w-full !max-w-full',
+            cineast: writer,
+            totalMovies: movies.length
+        })
         <ul class="flex flex-wrap gap-3">
             @each(movie in movies)
                 @!movie.card({ movie, class: 'w-full max-w-sm' })

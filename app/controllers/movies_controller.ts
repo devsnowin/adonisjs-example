@@ -22,11 +22,17 @@ export default class MoviesController {
 
   async show({ params, view }: HttpContext) {
     const movie = await Movie.findByOrFail('slug', params.slug)
+    const cast = await movie.related('castMembers').query().orderBy('pivot_sort_order')
+    const crew = await movie
+      .related('crewMembers')
+      .query()
+      .wherePivot('title', 'Sound Mixer')
+      .orderBy('pivot_sort_order')
 
     await movie.load('director')
     await movie.load('writer')
     await movie.load('status')
 
-    return view.render('pages/movies/show', { movie })
+    return view.render('pages/movies/show', { movie, cast, crew })
   }
 }

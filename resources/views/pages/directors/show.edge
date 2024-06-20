@@ -1,7 +1,13 @@
-@layout.app({title: 'Director Name'}) 
-    
+@layout.app({title: 'Director Name'})
+
     <main class="space-y-6">
-        <h1>Movies by {{director.fullName}}</h1>
+        @!cineast.card({
+            href: route('directors.show', { id: director.id }),
+            class: '!max-w-full',
+            cineast: director,
+            totalMovies: movies.length
+        })
+        <h1 class="pt-8">Movies by {{director.fullName}}</h1>
         <ul class="flex flex-wrap gap-3">
             @each(movie in movies)
                 @!movie.card({ movie, class: 'w-full max-w-sm' })
