@@ -2,6 +2,7 @@ import router from '@adonisjs/core/services/router'
 
 import { middleware } from './kernel.js'
 
+const RegisterController = () => import('#controllers/auth/register_controller')
 const WritersController = () => import('#controllers/writers_controller')
 const DirectorsController = () => import('#controllers/directors_controller')
 const RedisController = () => import('#controllers/redis_controller')
@@ -11,7 +12,14 @@ const MoviesController = () => import('#controllers/movies_controller')
 router.on('/').render('pages/home').as('home')
 
 // Auth
-router.on('/login').render('pages/auth/login').as('login')
+router
+  .group(() => {
+    router.on('/login').render('pages/auth/login').as('login.show')
+    router.get('/register', [RegisterController, 'show']).as('register.show')
+    router.post('/register', [RegisterController, 'store']).as('register.store')
+  })
+  .prefix('/auth')
+  .as('auth')
 
 // Private Page
 router.on('/dashboard').render('pages/dashboard').as('dashboard').use(middleware.auth())
