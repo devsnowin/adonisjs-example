@@ -1,0 +1,26 @@
+@let(valueOld = name ? old(name) : '')
+@let(value = $props.value || valueOld)
+
+<div class="space-y-2">
+    @if ($slots.label || label)
+        <label for="{{name}}">
+            @if ($slots.label)
+                {{{ await $slots.label() }}}
+            @else
+                {{ label }}
+            @endif
+        </label>
+    @endif
+
+    @!input({ 
+        type: type || 'text', 
+        name: name || "",
+        value: value || ""
+    })
+
+    @if (name)
+        @inputError(name) 
+            <p class="text-sm text-red-400">{{ $messages.join(', ') }}</p>
+        @end
+    @endif
+</div>
