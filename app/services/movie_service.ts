@@ -25,7 +25,6 @@ export default class MovieService {
       await md.process()
       return md
     } catch (error) {
-      console.log({ error })
       throw new Exception(`Could not find a movie called ${slug}`, {
         code: 'NOT_FOUND',
         status: 404,

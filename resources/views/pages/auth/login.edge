@@ -1,26 +1,46 @@
 @layout.app({title: 'Login'})
-    <main class="grid place-items-center h-full">
-        <form action="" class="max-w-md w-full space-y-6">
-            <div class="flex gap-2 flex-col">
-                <h2 class="text-4xl">Login</h2>
-                <p class="max-w-sm">Sign In and Start Explore the Movies collections.</p>
-            </div>
-            <div class="space-y-2">
-                <label for="email">Email</label>
-                @!input({type: 'email', placeholder: 'Your Email Id'})
-            </div>
-            <div class="space-y-2">
-                <label for="password">Password</label>
-                @!input({type: 'password', placeholder: 'Your password'})
-            </div>
-            <div class="w-full">
-                @button({class: 'w-full'})
-                    Login
-                @end
-            </div>
-            <div>
-                Don't have an account? <a href="{{route("auth.register.show")}}" class="text-primary underline">Create one</a>
-            </div>
-        </form>
-    </main>
+<main class="grid place-items-center h-full">
+    <form action="{{ route("auth.login.store") }}" method="post" class="max-w-md w-full space-y-6">
+
+        {{ csrfField() }}
+
+        <div class="flex gap-2 flex-col">
+            <h2 class="text-4xl">Login</h2>
+            <p class="max-w-sm">Sign In and Start Explore the Movies collections.</p>
+        </div>
+
+        @error('E_INVALID_CREDENTIALS')
+            <p role="alert" class="text-red-900 text-sm font-bold bg-red-200 rounded-[10px] p-4">{{ $message }}</p>
+        @end
+        
+        @!form.group({
+            label: 'Email',
+            name: 'email'
+        }) 
+        
+        @!form.group({
+            label: 'Password',
+            name: 'password',
+            type: 'password'
+        })
+
+        <div class="flex gap-2 items-center">
+            @!input({
+                type: 'checkbox',
+                name: 'isRememberMe',
+                class: '!w-fit !h-fit !p-2 !rounded-[4px] cursor-pointer'
+            })
+            <label for="rememberMe">Remember Me</label>
+        </div>
+          
+        <div class="w-full">
+            @button({class: 'w-full'})
+            Login
+            @end
+        </div>
+        <div>
+            Don't have an account? <a href="{{route("auth.register.show")}}" class="text-primary underline">Create One</a>
+        </div>
+    </form>
+</main>
 @end
