@@ -12,7 +12,8 @@ const RedisController = () => import('#controllers/redis_controller')
 const MoviesController = () => import('#controllers/movies_controller')
 
 // Home
-router.get('/', [HomeController, 'show']).as('home')
+router.get('/', [HomeController, 'index']).as('home')
+router.get('/showcase', [HomeController, 'show']).as('home.show')
 
 // Auth
 router

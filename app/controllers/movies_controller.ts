@@ -4,20 +4,13 @@ import Movie from '#models/movie'
 
 export default class MoviesController {
   async index({ view }: HttpContext) {
-    const comingSoonMovies = await Movie.query()
-      .apply((scope) => scope.notReleased())
+    const movies = await Movie.query()
       .preload('director')
       .preload('writer')
-      .whereNotNull('releasedAt')
-      .orderBy('releasedAt', 'desc')
-      .limit(3)
-    const recentlyReleasedMovies = await Movie.query()
-      .apply((scope) => scope.released())
-      .preload('director')
-      .preload('writer')
-      .orderBy('releasedAt', 'desc')
-      .limit(9)
-    return view.render('pages/movies/index', { recentlyReleasedMovies, comingSoonMovies })
+      .orderBy('title')
+      .limit(15)
+
+    return view.render('pages/movies/index', { movies })
   }
 
   async show({ params, view }: HttpContext) {
