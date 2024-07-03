@@ -18,7 +18,7 @@
 
 <div class="{{
         html.classNames([
-            "relative max-w-sm overflow-hidden rounded-xl bg-card text-card-foreground shadow",
+            "relative max-w-sm overflow-hidden rounded-xl bg-secondary text-secondary-foreground shadow",
             ($props.class || "")
         ])
     }}"
@@ -31,7 +31,7 @@
         </div>
         <span class="w-full max-w-40 mt-6 ml-2">
             <h5 class="text-base font-bold leading-6 tracking-tight">{{$props.cineast.fullName}}</h5>
-            <small class="block mt-1 text-sm font-medium leading-none text-neutral-500">
+            <small class="block mt-1 text-sm font-medium leading-none text-muted-foreground">
                 {{
                     ($props.cineast.firstName)
                         .toLowerCase()
@@ -46,11 +46,11 @@
         @end
     </div>
     <div class="relative pb-6 p-7">
-        <p class="mt-12 mb-6 text-neutral-500 text-">
+        <p class="mt-12 mb-6 text-secondary-foreground text-">
             Worked with {{totalMovies}} movies
         </p>
         @if(Object.keys($props.cineast.$extras).length > 0)
-            <div class="flex items-center justify-between pr-2 text-neutral-500">
+            <div class="flex items-center justify-between pr-2 text-muted-foreground">
                 <span class="text-sm hover:underline">
                     <strong class="text-white">
                         {{releasedCount}}

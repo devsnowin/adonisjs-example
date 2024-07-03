@@ -1,9 +1,11 @@
 @let(valueOld = name ? old(name) : '')
 @let(value = $props.value || valueOld)
 
-<div class="space-y-2">
+<div class="{{ html.classNames([
+    'space-y-2', $props.class
+]) }}">
     @if ($slots.label || label)
-        <label for="{{name}}">
+        <label for="{{name}}" class="pl-1.5">
             @if ($slots.label)
                 {{{ await $slots.label() }}}
             @else
@@ -12,11 +14,19 @@
         </label>
     @endif
 
-    @!input({ 
-        type: type || 'text', 
-        name: name || "",
-        value: value || ""
-    })
+    @if(type === 'select') 
+        <select name="{{ name || "" }}" id="status" class="bg-background border-input text-sm rounded-lg focus:ring-primary focus:border-primary block w-full h-12 py-2 px-4">
+            {{{ await $slots.main() }}}
+        </select>
+    @else
+        @!input({ 
+            type: type || 'text', 
+            name: name || "",
+            value: value || "",
+            placeholder: placeholder || ""
+        })
+    @endif
+
 
     @if (name)
         @inputError(name) 

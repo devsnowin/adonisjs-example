@@ -1,16 +1,45 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import router from '@adonisjs/core/services/router'
+import querystring from 'node:querystring'
 
 import Movie from '#models/movie'
+import MovieStatus from '#models/movie_status'
+import MovieService from '#services/movie_service'
+import { movieFilterValidator } from '#validators/movie'
 
 export default class MoviesController {
-  async index({ view }: HttpContext) {
-    const movies = await Movie.query()
-      .preload('director')
-      .preload('writer')
-      .orderBy('title')
-      .limit(15)
+  async index({ request, view }: HttpContext) {
+    const page = request.input('page')
+    const filters = await movieFilterValidator.validate(request.qs())
+    const qs = querystring.stringify(filters)
 
-    return view.render('pages/movies/index', { movies })
+    const movieSortOptions = MovieService.sortOptions
+    const movies = await MovieService.getFiltered(page, filters)
+    const movieStatuses = await MovieStatus.query().orderBy('name').select('id', 'name')
+
+    movies.baseUrl(router.makeUrl('movies.index'))
+
+    const rangeMin = movies.currentPage - 3
+    const rangeMax = movies.currentPage + 3
+    let pagination = movies.getUrlsForRange(1, movies.lastPage).filter((item) => {
+      return item.page >= rangeMin && item.page <= rangeMax
+    })
+
+    if (qs) {
+      pagination = pagination.map((item) => {
+        item.url += `&${qs}`
+        return item
+      })
+    }
+
+    return view.render('pages/movies/index', {
+      movies,
+      filters,
+      movieStatuses,
+      movieSortOptions,
+      pagination,
+      qs,
+    })
   }
 
   async show({ params, view }: HttpContext) {
