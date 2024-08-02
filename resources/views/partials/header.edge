@@ -4,6 +4,15 @@
         <a href="{{route("movies.index")}}">Movies</a>
         <a href="{{route("directors.index")}}">Directors</a>
         <a href="{{route("writers.index")}}">Writers</a>
-        <a href="{{route("dashboard")}}">Dashboard</a>
+
+        {{-- {{ inspect(auth.user) }} --}}
+        
+        @if(auth.user) 
+            <a href="{{ route('profile.index') }}">
+                <img src="{{ auth.user.avatarUrl }}" alt="auth.user.fullName" class="w-12 rounded-full">
+            </a>
+        @else
+            <a href="{{route("auth.login.show")}}">Sign In</a>
+        @endif
     </nav>
 </header>

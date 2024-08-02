@@ -1,37 +1,123 @@
 
 @layout.app({ title: "Movies" })
 
-  <main class="h-full">
-    <div class="space-y-6">
-      <header class="flex items-center justify-between">
-        <h1>Recently Released Movies</h1>
-        <form action="{{ route("redis.flush", {}, { qs: { _method: 'DELETE' } }) }}" method="post">
-          {{ csrfField() }}
-          @button({variant: 'destructive', type: 'submit'}) 
-            @svg('ph:trash-bold', {class: 'mr-2'})
-            Flush Redis
-          @end
+  @slot('meta')
+    <meta name="description" content="Browse and search movie list">
+  @end
+
+  <main class="h-full space-y-6">
+      <header class="space-y-4">
+        <h1 class="w-full">All Movies</h1>
+        <form action="{{ route('movies.index') }}" method="get" class="flex w-full items-center justify-between gap-4">
+          <div class="w-full flex items-end gap-4">
+            @!form.group({
+              label: 'Movie Title',
+              name: 'search',
+              type: 'search',
+              placeholder: 'Search movies by title',
+              class: 'w-full max-w-md',
+              value: filters.search
+            })
+            
+            @form.group({
+              label: 'Status',
+              name: 'status',
+              type: 'select',
+              class: 'w-full max-w-[200px]'
+            })
+              <option value="" selected>All</option>
+              @each(status in movieStatuses)
+                <option value="{{ status.id }}" {{ html.attrs({ selected: status.id == filters.status }) }}>
+                  {{ status.name }}
+                </option>
+              @end
+            @end
+            @form.group({
+              label: 'Sort',
+              name: 'sort',
+              type: 'select',
+              class: 'w-full max-w-[200px]'
+            })
+              @each(item in movieSortOptions)
+                <option value="{{ item.id }}" {{ html.attrs({ selected: item.id == filters.sort }) }}>
+                  {{ item.text }}
+                </option>
+              @end
+            @end
+          </div>
+
+            @button({ type: 'submit' }) 
+              Search
+            @end
         </form>
       </header>
-      <div class="space-y-4">
-        <h2>Coming Soon</h2>
-        <div class="flex flex-wrap gap-3">
-          @each(movie in comingSoonMovies)
-            @!movie.card({ movie, class: 'w-full max-w-sm', showCineasts: true })
-            {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
+      @if (!movies || movies.length <= 0) 
+        <div class='h-4/5 grid place-items-center'>
+          <p class="text-muted-foreground text-xl font-bold">No Movies Found</p>
+        </div>
+      @else
+        <div class="flex flex-wrap gap-16 justify-center">
+          @each(movie in movies)
+            @!movie.card({ movie, class: 'w-full max-w-sm', showCineasts: true, showStatus: true })
           @end
         </div>
-      </div>
-      <div class="space-y-4">
-        <h2>Recently Released</h2>
-        <div class="flex flex-wrap gap-3">
-          @each(movie in recentlyReleasedMovies)
-            @!movie.card({ movie, class: 'w-full max-w-sm', showCineasts: true })
-            {{-- @!component('components/movie/card', { movie, class: 'max-w-sm' }) --}}
+
+        <footer class="flex items-center justify-center gap-2">
+
+          @if(movies.hasPages)
+            <a 
+              href="{{ movies.getUrl(movies.firstPage) }}{{ qs ? `&${qs}` : '' }}" 
+              class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
+            >
+              <<
+            </a>
           @end
-        </div>
-      </div>
-    </div>
+
+          @if(movies.currentPage > movies.firstPage)
+            <a 
+              href="{{ movies.getPreviousPageUrl() }}{{ qs ? `&${qs}` : '' }}" 
+              class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
+            >
+              <
+            </a>
+          @end
+          
+          @each(item in pagination)
+            <a 
+              {{ 
+                html.attrs({
+                  href: item.url,
+                  class: [
+                    'w-8 h-8 p-6 flex items-center justify-center border border-input rounded',
+                    { 'bg-primary': item.isActive }
+                  ]
+                }) 
+              }}
+            >
+              {{ item.page }}
+            </a>
+          @end
+
+          @if(movies.currentPage < movies.lastPage)
+            <a 
+              href="{{ movies.getNextPageUrl() }}{{ qs ? `&${qs}` : '' }}" 
+              class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
+            >
+              >
+            </a>
+          @end
+          
+          @if(movies.hasPages)
+            <a 
+              href="{{ movies.getUrl(movies.lastPage) }}{{ qs ? `&${qs}` : '' }}" 
+              class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
+            >
+              >>
+            </a>
+          @end
+          
+        </footer>
+      @endif
   </main>
     
 @end

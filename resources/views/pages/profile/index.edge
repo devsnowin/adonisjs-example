@@ -1,0 +1,17 @@
+@layout.app({title: 'Profile'}) 
+    <main>
+        <header class="flex justify-between items-end">
+            <div>
+                <h2 class="capitalize">{{ auth.user.fullName }}</h2>
+                <span class="text-gray-400">{{ auth.user.email }}</span>
+            </div>
+            <form action="{{ route('auth.logout') }}" method="post">
+                {{ csrfField() }}
+
+                @button({variant: 'destructive'}) 
+                    Logout
+                @end
+            </form>
+        </header>
+    </main>
+@end

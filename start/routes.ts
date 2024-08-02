@@ -2,19 +2,38 @@ import router from '@adonisjs/core/services/router'
 
 import { middleware } from './kernel.js'
 
+const LogoutController = () => import('#controllers/auth/logout_controller')
+const HomeController = () => import('#controllers/home_controller')
+const RegisterController = () => import('#controllers/auth/register_controller')
+const LoginController = () => import('#controllers/auth/login_controller')
 const WritersController = () => import('#controllers/writers_controller')
 const DirectorsController = () => import('#controllers/directors_controller')
 const RedisController = () => import('#controllers/redis_controller')
 const MoviesController = () => import('#controllers/movies_controller')
 
 // Home
-router.on('/').render('pages/home').as('home')
+router.get('/', [HomeController, 'index']).as('home')
+router.get('/showcase', [HomeController, 'show']).as('home.show')
 
 // Auth
-router.on('/login').render('pages/auth/login').as('login')
+router
+  .group(() => {
+    router
+      .get('/register', [RegisterController, 'show'])
+      .as('register.show')
+      .use(middleware.guest())
+    router
+      .post('/register', [RegisterController, 'store'])
+      .as('register.store')
+      .use(middleware.guest())
 
-// Private Page
-router.on('/dashboard').render('pages/dashboard').as('dashboard').use(middleware.auth())
+    router.get('/login', [LoginController, 'show']).as('login.show').use(middleware.guest())
+    router.post('/login', [LoginController, 'store']).as('login.store').use(middleware.guest())
+
+    router.post('/logout', [LogoutController, 'handle']).as('logout').use(middleware.auth())
+  })
+  .prefix('/auth')
+  .as('auth')
 
 // Movies
 router.get('/movies', [MoviesController, 'index']).as('movies.index')
@@ -33,3 +52,23 @@ router.get('/writers/:id', [WritersController, 'show']).as('writers.show')
 // Redis flush & delete
 router.delete('/redis/flush', [RedisController, 'flush']).as('redis.flush')
 router.delete('/redis/:slug', [RedisController, 'destory']).as('redis.delete')
+
+// Private Page
+router
+  .group(() => {
+    router.on('/dashboard').render('pages/dashboard').as('dashboard')
+    router.on('/profile').render('pages/profile/index').as('profile.index')
+  })
+  .use(middleware.auth())
+
+router
+  .group(() => {
+    router
+      .get('/', async () => {
+        return 'Admin route!'
+      })
+      .as('index')
+  })
+  .prefix('/admin')
+  .as('admin')
+  .use(middleware.admin())

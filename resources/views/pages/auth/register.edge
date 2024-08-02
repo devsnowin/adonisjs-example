@@ -1,0 +1,39 @@
+@layout.app({title: 'Create new account'})
+<main class="grid place-items-center h-full">
+    <form action="{{ route("auth.register.store") }}" method="post" class="max-w-md w-full space-y-6">
+
+        {{ csrfField() }}
+
+        <div class="flex gap-2 flex-col">
+            <h2 class="text-4xl">Register</h2>
+            <p class="max-w-sm">Create New Account and Start Explore the Movies collections.</p>
+        </div>
+
+        @!form.group({
+            label: 'Full Name',
+            name: 'fullName'
+        }) 
+        
+        @!form.group({
+            label: 'Email',
+            name: 'email',
+            type: 'email'
+        }) 
+        
+        @!form.group({
+            label: 'Password',
+            name: 'password',
+            type: 'password'
+        }) 
+          
+        <div class="w-full">
+            @button({class: 'w-full'})
+            Register
+            @end
+        </div>
+        <div>
+            Already have an account? <a href="{{route("auth.login.show")}}" class="text-primary underline">Sign In</a>
+        </div>
+    </form>
+</main>
+@end
