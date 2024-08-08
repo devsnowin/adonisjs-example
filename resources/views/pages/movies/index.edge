@@ -8,7 +8,7 @@
   <main class="h-full space-y-6">
       <header class="space-y-4">
         <h1 class="w-full">All Movies</h1>
-        <form action="{{ route('movies.index') }}" method="get" class="flex w-full items-center justify-between gap-4">
+        <form action="{{ route('movies.index') }}" method="get" class="flex w-full items-end justify-between gap-4">
           <div class="w-full flex items-end gap-4">
             @!form.group({
               label: 'Movie Title',
@@ -46,12 +46,12 @@
             @end
           </div>
 
-            @button({ type: 'submit' }) 
+            @button({ type: 'submit' })
               Search
             @end
         </form>
       </header>
-      @if (!movies || movies.length <= 0) 
+      @if (!movies || movies.length <= 0)
         <div class='h-4/5 grid place-items-center'>
           <p class="text-muted-foreground text-xl font-bold">No Movies Found</p>
         </div>
@@ -66,7 +66,7 @@
 
           @if(movies.hasPages)
             <a 
-              href="{{ movies.getUrl(movies.firstPage) }}{{ qs ? `&${qs}` : '' }}" 
+              href="{{ movies.getUrl(movies.firstPage) }}"
               class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
             >
               <<
@@ -75,7 +75,7 @@
 
           @if(movies.currentPage > movies.firstPage)
             <a 
-              href="{{ movies.getPreviousPageUrl() }}{{ qs ? `&${qs}` : '' }}" 
+              href="{{ movies.getPreviousPageUrl() }}"
               class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
             >
               <
@@ -100,7 +100,7 @@
 
           @if(movies.currentPage < movies.lastPage)
             <a 
-              href="{{ movies.getNextPageUrl() }}{{ qs ? `&${qs}` : '' }}" 
+              href="{{ movies.getNextPageUrl() }}"
               class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
             >
               >
@@ -109,7 +109,7 @@
           
           @if(movies.hasPages)
             <a 
-              href="{{ movies.getUrl(movies.lastPage) }}{{ qs ? `&${qs}` : '' }}" 
+              href="{{ movies.getUrl(movies.lastPage) }}"
               class='w-8 h-8 p-6 flex items-center justify-center border border-input rounded'
             >
               >>

@@ -18,26 +18,31 @@ export default class WatchlistsController {
           .if(filters.watched === 'watched', (watchlist) => watchlist.whereNotNull('watchedAt'))
           .if(filters.watched === 'unwatched', (watchlist) => watchlist.whereNull('watchedAt'))
       )
-      .paginate(page, 15)
+      .paginate(page, 9)
     const movieStatuses = await MovieStatus.query().orderBy('name').select('id', 'name')
     const movieSortOptions = MovieService.sortOptions
 
     movies.baseUrl(router.makeUrl('watchlists.index'))
     movies.queryString(filters)
 
+    const rangeMin = movies.currentPage - 3
+    const rangeMax = movies.currentPage + 3
+    const pagination = movies.getUrlsForRange(1, movies.lastPage).filter((item) => {
+      return item.page >= rangeMin && item.page <= rangeMax
+    })
+
     return view.render('pages/watchlist', {
       movies,
       movieStatuses,
       movieSortOptions,
       filters,
+      pagination,
     })
   }
 
   async toggle({ response, params, auth }: HttpContext) {
     const { movieId } = params
     const userId = auth.user!.id
-
-    console.log({ movieId })
 
     const watchlist = await Watchlist.query().where({ movieId, userId }).first()
 
@@ -47,7 +52,7 @@ export default class WatchlistsController {
       await Watchlist.create({ movieId, userId })
     }
 
-    return response.redirect().back()
+    return response.redirect().withQs().back()
   }
 
   async toggleWatched({ response, auth, params }: HttpContext) {
