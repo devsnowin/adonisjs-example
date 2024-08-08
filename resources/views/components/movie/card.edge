@@ -1,7 +1,7 @@
-<div 
+<div
     class="{{
         html.classNames([
-            "rounded-xl bg-secondary text-secondary-foreground shadow space-y-2 overflow-hidden flex flex-col", 
+            "rounded-xl bg-secondary text-secondary-foreground shadow space-y-2 overflow-hidden flex flex-col",
             ($props.class || "" )
             ])
         }}"
@@ -35,17 +35,27 @@
                 </p>
             @end
         </div>
-        <div class="flex justify-between justify-self-end">
-            @if (showStatus)
-                <div class="flex flex-col">
+        @if (showStatus)
+                <div class="flex gap-2">
                     <strong class="text-muted-foreground">Status:</strong>
-                    <span class="rounded-full px-2.5 py-0.5 text-secondary-foreground text-xs font-semibold bg-primary">
+                    <span class="rounded-full px-2 py-1 text-secondary-foreground text-xs font-semibold bg-green-600">
                         {{{movie.status.name}}}
                     </span>
                 </div>
-            @end
+        @end
+        <div class="flex justify-between justify-self-end">
             @button({ href: route('movies.show', { slug: movie.slug }) })
                 <span>View Details</span>
+            @end
+            @if ($slots.action)
+                {{{ await $slots.action() }}}
+            @elseif(auth.user && movie.watchlist)
+                <form method="post" action="{{ route('watchlists.toggle', { movieId: movie.id }) }}">
+                    {{ csrfField() }}
+                    @button({ type: 'submit' })
+                        <span>{{ movie.watchlist.length ? 'In Your Watchlist' : 'Add to List' }}</span>
+                    @end
+                </form>
             @end
         </div>
     </div>

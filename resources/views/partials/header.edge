@@ -5,9 +5,10 @@
         <a href="{{route("directors.index")}}">Directors</a>
         <a href="{{route("writers.index")}}">Writers</a>
 
-        {{-- {{ inspect(auth.user) }} --}}
-        
-        @if(auth.user) 
+        @if(auth.user)
+            <a href="{{ route('watchlists.index') }}">
+                Watchlists
+            </a>
             <a href="{{ route('profile.index') }}">
                 <img src="{{ auth.user.avatarUrl }}" alt="auth.user.fullName" class="w-12 rounded-full">
             </a>

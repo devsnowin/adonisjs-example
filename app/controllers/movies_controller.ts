@@ -8,13 +8,13 @@ import MovieService from '#services/movie_service'
 import { movieFilterValidator } from '#validators/movie'
 
 export default class MoviesController {
-  async index({ request, view }: HttpContext) {
-    const page = request.input('page')
+  async index({ request, view, auth }: HttpContext) {
+    const page = request.input('page', 1)
     const filters = await movieFilterValidator.validate(request.qs())
     const qs = querystring.stringify(filters)
 
     const movieSortOptions = MovieService.sortOptions
-    const movies = await MovieService.getFiltered(page, filters)
+    const movies = await MovieService.getFiltered(filters, auth.user).paginate(page, 15)
     const movieStatuses = await MovieStatus.query().orderBy('name').select('id', 'name')
 
     movies.baseUrl(router.makeUrl('movies.index'))

@@ -19,9 +19,15 @@ export default class WritersController {
     return view.render('pages/writer/index', { writers })
   }
 
-  async show({ view, params }: HttpContext) {
+  async show({ view, params, auth }: HttpContext) {
     const writer = await Cineast.findOrFail(params.id)
-    const movies = await writer.related('moviesWritten').query().orderBy('title')
+    const movies = await writer
+      .related('moviesWritten')
+      .query()
+      .if(auth.user, (query) =>
+        query.preload('watchlist', (watchlist) => watchlist.where('userId', auth.user!.id))
+      )
+      .orderBy('title')
 
     return view.render('pages/writer/show', {
       writer,

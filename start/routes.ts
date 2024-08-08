@@ -2,6 +2,7 @@ import router from '@adonisjs/core/services/router'
 
 import { middleware } from './kernel.js'
 
+const WatchlistsController = () => import('#controllers/watchlists_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const HomeController = () => import('#controllers/home_controller')
 const RegisterController = () => import('#controllers/auth/register_controller')
@@ -15,32 +16,24 @@ const MoviesController = () => import('#controllers/movies_controller')
 router.get('/', [HomeController, 'index']).as('home')
 router.get('/showcase', [HomeController, 'show']).as('home.show')
 
-// Auth
-router
-  .group(() => {
-    router
-      .get('/register', [RegisterController, 'show'])
-      .as('register.show')
-      .use(middleware.guest())
-    router
-      .post('/register', [RegisterController, 'store'])
-      .as('register.store')
-      .use(middleware.guest())
-
-    router.get('/login', [LoginController, 'show']).as('login.show').use(middleware.guest())
-    router.post('/login', [LoginController, 'store']).as('login.store').use(middleware.guest())
-
-    router.post('/logout', [LogoutController, 'handle']).as('logout').use(middleware.auth())
-  })
-  .prefix('/auth')
-  .as('auth')
-
 // Movies
 router.get('/movies', [MoviesController, 'index']).as('movies.index')
 router
   .get('/movies/:slug', [MoviesController, 'show'])
   .as('movies.show')
   .where('slug', router.matchers.slug())
+
+// watchlist
+router
+  .group(() => {
+    router.get('/watchlist', [WatchlistsController, 'index']).as('index')
+    router.post('/watchlists/:movieId/toggle', [WatchlistsController, 'toggle']).as('toggle')
+    router
+      .post('/watchlists/:movieId/toggle-watched', [WatchlistsController, 'toggleWatched'])
+      .as('toggle.watched')
+  })
+  .as('watchlists')
+  .use(middleware.auth())
 
 // Cineasts
 router.get('/directors', [DirectorsController, 'index']).as('directors.index')
@@ -72,3 +65,23 @@ router
   .prefix('/admin')
   .as('admin')
   .use(middleware.admin())
+
+// Auth
+router
+  .group(() => {
+    router
+      .get('/register', [RegisterController, 'show'])
+      .as('register.show')
+      .use(middleware.guest())
+    router
+      .post('/register', [RegisterController, 'store'])
+      .as('register.store')
+      .use(middleware.guest())
+
+    router.get('/login', [LoginController, 'show']).as('login.show').use(middleware.guest())
+    router.post('/login', [LoginController, 'store']).as('login.store').use(middleware.guest())
+
+    router.post('/logout', [LogoutController, 'handle']).as('logout').use(middleware.auth())
+  })
+  .prefix('/auth')
+  .as('auth')

@@ -6,9 +6,12 @@ export default class HomeController {
     return view.render('pages/home/index')
   }
 
-  async show({ view }: HttpContext) {
+  async show({ view, auth }: HttpContext) {
     const comingSoonMovies = await Movie.query()
       .apply((scope) => scope.notReleased())
+      .if(auth.user, (query) =>
+        query.preload('watchlist', (watchlist) => watchlist.where('userId', auth.user!.id))
+      )
       .preload('director')
       .preload('writer')
       .whereNotNull('releasedAt')
@@ -16,6 +19,9 @@ export default class HomeController {
       .limit(3)
     const recentlyReleasedMovies = await Movie.query()
       .apply((scope) => scope.released())
+      .if(auth.user, (query) =>
+        query.preload('watchlist', (watchlist) => watchlist.where('userId', auth.user!.id))
+      )
       .preload('director')
       .preload('writer')
       .orderBy('releasedAt', 'desc')

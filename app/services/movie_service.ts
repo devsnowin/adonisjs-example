@@ -1,4 +1,5 @@
 import Movie from '#models/movie'
+import User from '#models/user'
 import { movieFilterValidator } from '#validators/movie'
 import { Infer } from '@vinejs/vine/types'
 
@@ -49,7 +50,10 @@ export default class MovieService {
     },
   ]
 
-  static getFiltered(page: number = 1, filters: Infer<typeof movieFilterValidator>) {
+  static getFiltered(
+    filters: Infer<typeof movieFilterValidator>,
+    user: User | undefined = undefined
+  ) {
     const sort =
       this.sortOptions.find((option) => option.id === filters.sort) || this.sortOptions[0]
 
@@ -59,10 +63,12 @@ export default class MovieService {
       .if(['writer_asc', 'writer_desc'].includes(sort.id), (query) => {
         query.join('cineasts', 'cineasts.id', 'writer_id').select('movies.*')
       })
+      .if(user, (query) =>
+        query.preload('watchlist', (watchlist) => watchlist.where('userId', user!.id))
+      )
       .preload('director')
       .preload('writer')
       .preload('status')
       .orderBy(sort.field, sort.dir)
-      .paginate(page, 15)
   }
 }
