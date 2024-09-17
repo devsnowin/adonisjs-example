@@ -8,8 +8,8 @@ Welcome to the AdonisJS tutorial repository! This repository serves as a collect
 
 - [x] **Setup**: Instructions on setting up AdonisJS environment.
 - [x] **Fundamentals**: Covers basic AdonisJS concepts such as routing, controllers, and views.
-- [ ] **Database Integration**: How to integrate databases with AdonisJS using Lucid ORM (on-process).
-- [ ] **Authentication**: Implementing user authentication and authorization.
+- [x] **Database Integration**: How to integrate databases with AdonisJS using Lucid ORM (on-process).
+- [x] **Authentication**: Implementing user authentication and authorization.
 - [ ] **Middleware**: Understanding and using middleware in AdonisJS applications.
 - [ ] **Deployment**: Tips for deploying AdonisJS applications to production environments.
 
